@@ -1,0 +1,91 @@
+This is the Warehouse Project. Its goal is to have a robot/drone driven,
+computer controlled warehouse.
+
+Warehouse Building:
+  The warehouse can be of any size, but must follow the following constraints:
+    The warehouse is vertically stacked, starting with a layer of crates, then
+    an open layer for access, then another layer of crates, stacked.
+   Example:
+CCCCC
+rrrrr
+CCCCC
+CCCCC
+rrrrr
+CCCCC
+(C = crate, r = robot access, viewed from the side.)
+
+    The front wall of the warehouse should have an input crate, an output
+    crate, and computer access for checking warehouse statistics, and
+    requesting items.
+
+    Behind the front wall is a service layer that should house the following:
+      A tower of chargers and capacitors in the left corner.
+      A vertical shaft next to the chargers for a delivery robot.
+      A dropoff tower next to that for output.
+    Example:
+wCCCC
+wciox
+wwwww
+(C: crate, w: wall, c: charger, i: input shaft, o: output shaft, x: don't care)
+
+    Example front of building:
+xxxxx
+xSxxx
+xCIOx
+xxxxx
+(S: screen, C: computer case, I: input chest, O: output chest, x: don't care)
+
+    The computer should line up with the charger tower to minimize power inputs
+    The screen may be extended.
+
+Software:
+  Items will be recorded as individual stack locations, with each stack being
+    a full stack other than the last.
+
+  Locations will be stored as the following:
+  item{
+    count, (number of items in the stack)
+    floor, (what floor of the warhouse)
+    x, (x,y coordinates of the box on that floor)
+    y,
+    top, (true/false if box is on above or below the robot level)
+    slot (which slot in the box the stack is in, following OC convention)
+  }
+
+  Example:
+  iron ingot{
+    count = 32,
+    floor = 5,
+    x = 2,
+    y = 6,
+    top = true,
+    slot = 15
+  }
+
+  Stacks will be stored on sequential floors where possible, so multiple
+  robots can fill large orders simultaneously.
+    (ie stack 1: floor 1, stack 2: floor 2, etc.)
+
+  The computer keeps track of all warehouse data, and sends the robots simple
+  commands along the lines of "floor x fetch y number from z coordinates..."
+
+  Input to the warehouse will be done via a bellhop robot, who will be told
+  to take specific stacks from the input chest, and put them in slots numbered
+  by the receiving floor for the item, floor robots will then be told to expect
+  and item and where to put it. The bellhop should have separate loading and
+  "go" commands to minimize trips. The bellhop robot takes stacks from the
+  input chest blindly, then reports what it has to the computer, to prevent
+  error from stacks being taken from the chest.
+
+  The database will be structured as follows:
+    A root "database" directory, with subdirectories named for the item.
+      Each item directory will have a 
+
+
+
+
+
+
+
+
+

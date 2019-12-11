@@ -1,0 +1,47 @@
+Port Registrar
+
+For wireless communication there are many port to communicate on,
+this document, and the associated pReg program are for managing their use.
+
+There are two ports with permanent registration, and the rest of the ports
+are divided into two regions, managed and unmanaged.
+
+Port 1 is exclusively for communicating with pReg, for port registration.
+Port 2 is exclusively for program startup communications, and has rules for its
+  use. This port is not for extended use, it should be used exclusively for
+  communicating to external machines the correct port to continue
+  communications on. To prevent errors all programs should use a unique name
+  for the first packet to communicate the intended recipients, then a port to
+  switch to, after exclusive communications are established all participants
+  should stop using this port.
+Ports 3-9999 are the unmanaged region, these ports may be used for any purpose,
+  and are unrestricted.
+Ports 10000-65535 are the managed region, to use these your program must
+  request a port from pReg, and a random port from this range will be given to
+  your program exclusively.
+
+Using pReg:
+  Simply broadcast a message on port one to communicate with pReg, the first
+  packet will be the request, and others context dependant. pReg will always
+  acknowledge successfull communication with "pReg" as the first packet,
+  followed by a response.
+
+  Requests:
+
+  request, "purpose": port
+    Request a port, the second message should be the intended purpose.
+    Example: ("request", "Warehouse 1")
+    On a success, pReg will return the registered port number.
+    On a failure, pReg will return "NAK" and a reason in the second packet.
+  
+  free, "port": ack
+    Request a port number be cleared from the registry.
+    pReg will return "ACK" on success, and "NAK" on failure, with a reason
+      in the second packet.
+
+  whois,"name/port": port/name
+    Check the registry for an entry. If sent a number pReg will search for
+      that port and return the registered purpose. If sent a string pReg will
+      search the register for a port registered with that purpose, and return
+      the port number on success. pReg will return a "No entry found" on failure in
+      either case.
